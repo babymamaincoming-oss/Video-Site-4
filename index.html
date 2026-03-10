@@ -31,15 +31,124 @@
       height: 100%;
       border: none;
     }
+    #login-overlay {
+      position: fixed;
+      inset: 0;
+      background: #facc15;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    #login-box {
+      background: rgba(0,0,0,.15);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 16px 40px rgba(0,0,0,.3);
+      text-align: center;
+    }
+    #login-box h1 {
+      margin: 0 0 1.5rem;
+      font-size: 1.6rem;
+      color: #1a1a1a;
+    }
+    #login-box label {
+      display: block;
+      text-align: left;
+      font-size: .875rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: .25rem;
+    }
+    #login-box input {
+      width: 100%;
+      padding: .6rem .75rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      box-sizing: border-box;
+      background: rgba(255,255,255,.85);
+      color: #1a1a1a;
+    }
+    #login-box input:focus {
+      outline: 3px solid rgba(0,0,0,.25);
+    }
+    #login-form {
+      width: 100%;
+    }
+    #login-btn {
+      width: 100%;
+      padding: .7rem;
+      background: #1a1a1a;
+      color: #facc15;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    #login-btn:hover {
+      background: #333;
+    }
+    #login-error {
+      margin-top: .75rem;
+      font-size: .875rem;
+      color: #7f1d1d;
+      min-height: 1.2em;
+    }
   </style>
 </head>
 <body>
-  <div class="video">
+  <!-- Login overlay -->
+  <div id="login-overlay">
+    <div id="login-box">
+      <h1>Larz Lángos</h1>
+      <form id="login-form" novalidate>
+        <label for="username">Username</label>
+        <input id="username" type="text" autocomplete="username" placeholder="Enter username">
+        <label for="password">Password</label>
+        <input id="password" type="password" autocomplete="current-password" placeholder="Enter password">
+        <button id="login-btn" type="submit">Sign In</button>
+      </form>
+      <p id="login-error" role="alert" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <!-- Video content (hidden until login) -->
+  <div class="video" id="video-content" style="display:none">
     <iframe
       src="https://www.youtube.com/embed/WOHPMtAkfrY"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen>
     </iframe>
   </div>
+
+  <script>
+    (function () {
+      // NOTE: Credentials are validated client-side only. This is suitable for a
+      // simple static demo site. Do NOT rely on this for real security.
+      var VALID_USER = 'potato';
+      var VALID_PASS = 'potato123';
+
+      document.getElementById('login-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var user = document.getElementById('username').value;
+        var pass = document.getElementById('password').value;
+        var error = document.getElementById('login-error');
+
+        if (user === VALID_USER && pass === VALID_PASS) {
+          document.getElementById('login-overlay').style.display = 'none';
+          document.getElementById('video-content').style.display = 'block';
+          error.textContent = '';
+        } else {
+          error.textContent = 'Incorrect username or password. Please try again.';
+        }
+      });
+    }());
+  </script>
 </body>
 </html>
